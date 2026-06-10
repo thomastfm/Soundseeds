@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>SoundSeeds</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;800&display=swap" rel="stylesheet">
+
+<style>
+body {
+  margin: 0;
+  font-family: 'Orbitron', sans-serif;
+  color: white;
+  overflow-x: hidden;
+  background: #05010a;
+}
+
+/* ANIMATED BACKGROUND */
+.bg {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  background: linear-gradient(120deg, #ff00cc, #00ffd5, #3a00ff);
+  background-size: 600% 600%;
+  animation: flow 12s ease infinite;
+  filter: blur(40px);
+  opacity: 0.7;
+}
+
+@keyframes flow {
+  0% {background-position: 0% 50%;}
+  50% {background-position: 100% 50%;}
+  100% {background-position: 0% 50%;}
+}
+
+/* MAIN LAYOUT */
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 60px 20px;
+  text-align: center;
+}
+
+h1 {
+  font-size: 3rem;
+  margin-bottom: 10px;
+}
+
+.subtitle {
+  opacity: 0.8;
+  margin-bottom: 40px;
+}
+
+/* INPUT CARD */
+.card {
+  background: rgba(255,255,255,0.06);
+  padding: 25px;
+  border-radius: 20px;
+  box-shadow: 0 0 30px rgba(0,255,255,0.2);
+  backdrop-filter: blur(10px);
+  width: 320px;
+}
+
+input {
+  width: 90%;
+  padding: 12px;
+  margin: 10px 0;
+  border-radius: 12px;
+  border: none;
+  outline: none;
+}
+
+button {
+  width: 100%;
+  padding: 12px;
+  margin-top: 10px;
+  border-radius: 30px;
+  border: none;
+  background: #00ffd5;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+button:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 20px #00ffd5;
+}
+
+/* PROFILE */
+.profile {
+  display: none;
+  max-width: 600px;
+  margin-top: 30px;
+}
+
+.identity-card {
+  background: rgba(255,255,255,0.08);
+  padding: 20px;
+  border-radius: 20px;
+  margin-top: 20px;
+}
+
+.archetype {
+  font-size: 1.8rem;
+  margin-bottom: 10px;
+}
+
+.tag {
+  display: inline-block;
+  margin: 5px;
+  padding: 5px 10px;
+  border-radius: 20px;
+  background: rgba(255,255,255,0.15);
+  font-size: 0.8rem;
+}
+
+audio {
+  width: 100%;
+  margin-top: 15px;
+}
+</style>
+
+</head>
+
+<body>
+
+<div class="bg"></div>
+
+<div class="container">
+
+<h1>🌱 SoundSeeds</h1>
+<div class="subtitle">Your music. Your identity. Your resonance.</div>
+
+<!-- INPUT -->
+
+<div class="card" id="form">
+  <input id="name" placeholder="Artist Name">
+  <input id="birth" placeholder="Birthday (YYYY-MM-DD)">
+  <input id="track" placeholder="Music URL (mp3 link optional)">
+  <button onclick="generate()">Generate Resonance Profile</button>
+</div>
+
+<!-- PROFILE -->
+
+<div class="profile" id="profile">
+
+  <h2 id="pname"></h2>
+  <div class="archetype" id="archetype"></div>
+
+  <div class="identity-card">
+    <div id="bio"></div>
+
+```
+<div style="margin-top:15px;">
+  <span class="tag" id="energy"></span>
+  <span class="tag" id="audience"></span>
+  <span class="tag" id="stage"></span>
+</div>
+
+<audio id="player" controls></audio>
+```
+
+  </div>
+
+</div>
+
+</div>
+
+<script>
+
+/* =========================
+   🌱 RESONANCE ENGINE
+========================= */
+
+function resonanceEngine(name, birth) {
+
+  let score = birth.replaceAll("-","")
+    .split("")
+    .reduce((a,b)=>a + Number(b), 0);
+
+  let archetype, bio, energy, audience, stage;
+
+  if (score < 40) {
+    archetype = "🌙 Lunar Dreamer";
+    bio = "You create emotional, atmospheric soundscapes that feel like memory and space.";
+    energy = "Soft Energy";
+    audience = "Late-night listeners";
+    stage = "Intimate storyteller";
+  }
+
+  else if (score < 60) {
+    archetype = "⚡ Neon Performer";
+    bio = "Your sound blends emotion and rhythm with high replay energy.";
+    energy = "Balanced Energy";
+    audience = "Indie + mainstream crossover";
+    stage = "Festival-ready presence";
+  }
+
+  else if (score < 80) {
+    archetype = "☀️ Solar Storyteller";
+    bio = "You bring emotion-driven music with strong narrative energy.";
+    energy = "High Emotional Energy";
+    audience = "Story-driven listeners";
+    stage = "Emotive performer";
+  }
+
+  else {
+    archetype = "🧠 Quantum Architect";
+    bio = "You build experimental sonic worlds and structured creative systems.";
+    energy = "Experimental Energy";
+    audience = "Deep listeners & creatives";
+    stage = "Conceptual performer";
+  }
+
+  return { archetype, bio, energy, audience, stage };
+}
+
+/* =========================
+   🎧 GENERATE PROFILE
+========================= */
+
+function generate() {
+
+  const name = document.getElementById("name").value;
+  const birth = document.getElementById("birth").value;
+  const track = document.getElementById("track").value;
+
+  const result = resonanceEngine(name, birth);
+
+  document.getElementById("form").style.display = "none";
+  document.getElementById("profile").style.display = "block";
+
+  document.getElementById("pname").innerText = name;
+  document.getElementById("archetype").innerText = result.archetype;
+  document.getElementById("bio").innerText = result.bio;
+  document.getElementById("energy").innerText = result.energy;
+  document.getElementById("audience").innerText = result.audience;
+  document.getElementById("stage").innerText = result.stage;
+
+  if (track) {
+    document.getElementById("player").src = track;
+  }
+}
+
+</script>
+
+</body>
+</html>
