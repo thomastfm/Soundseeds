@@ -11,83 +11,134 @@
 body {
   margin: 0;
   font-family: 'Orbitron', sans-serif;
+  background: #05010A;
   color: white;
+}
+
+/* ================= HERO ================= */
+.hero {
+  height: 80vh;
+  background:
+    linear-gradient(rgba(0,0,0,0.6), rgba(5,1,10,0.9)),
+    url("https://images.unsplash.com/photo-1518972559570-7cc1309f3229?auto=format&fit=crop&w=1600&q=80");
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   text-align: center;
-  overflow-x: hidden;
-  background: radial-gradient(circle at top, #120024, #05010a, #000000);
+  padding: 20px;
 }
 
-header {
+.hero h1 {
+  font-size: 64px;
+  margin: 0;
+}
+
+.hero p {
+  color: #00FFD5;
+  font-size: 22px;
+}
+
+/* ================= LAYOUT ================= */
+.section {
+  padding: 60px 20px;
+}
+
+.glass {
+  max-width: 700px;
+  margin: auto;
   padding: 30px;
-  font-size: 28px;
-  color: #00ffd5;
+  border-radius: 20px;
+  background: rgba(255,255,255,0.05);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255,255,255,0.08);
 }
 
-input, button {
-  padding: 10px;
-  margin: 8px;
-  border-radius: 8px;
+/* ================= INPUTS ================= */
+input {
+  width: 90%;
+  max-width: 500px;
+  padding: 14px;
+  margin: 10px;
+  border-radius: 10px;
   border: none;
 }
 
+/* ================= BUTTON ================= */
 button {
-  background: #00ffd5;
+  padding: 14px 20px;
+  border: none;
+  border-radius: 10px;
+  background: #00FFD5;
   cursor: pointer;
+  font-weight: bold;
 }
 
+/* ================= FEED ================= */
 #feed {
-  margin-top: 30px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
 }
+
 .card {
-  background: #111;
-  margin: 10px auto;
-  padding: 15px;
-  border-radius: 12px;
-  width: 80%;
+  background: rgba(255,255,255,0.05);
+  padding: 20px;
+  border-radius: 18px;
+  border: 1px solid rgba(255,255,255,0.08);
+  backdrop-filter: blur(10px);
+}
+
+.card h3 {
+  margin: 0;
+  color: #00FFD5;
+}
+
+.badge {
+  display: inline-block;
+  margin-top: 8px;
+  padding: 4px 10px;
+  font-size: 12px;
+  border-radius: 999px;
+  background: rgba(0,255,213,0.15);
+  color: #00FFD5;
 }
 </style>
-.card {
-  background: rgba(17,17,17,0.7);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(0,255,213,0.1);
-  box-shadow: 0 0 20px rgba(0,255,213,0.1);
-}
-  body::before {
-  content: "";
-  position: fixed;
-  top: -50%;
-  left: -50%;
-  width: 200%;
-  height: 200%;
-  background: radial-gradient(circle, rgba(0,255,213,0.08), transparent 60%);
-  animation: pulse 8s infinite alternate;
-  z-index: -1;
-}
-
-@keyframes pulse {
-  0% { transform: scale(1); opacity: 0.4; }
-  100% { transform: scale(1.2); opacity: 0.8; }
-}
 </head>
 
 <body>
 
-<header>🌱 SoundSeeds — AI Music Identity Engine</header>
+<!-- HERO -->
+<div class="hero">
+  <div>
+    <h1>SoundSeeds</h1>
+    <p>Discover Your Musical Identity</p>
+  </div>
+</div>
 
-<!-- INPUTS -->
-<input id="name" placeholder="Artist Name" />
-<input id="birth" placeholder="Birthdate (YYYY-MM-DD)" />
-<input id="track" placeholder="Music URL" />
+<!-- IDENTITY ENGINE -->
+<div class="section">
+  <div class="glass">
 
-<br>
+    <h2>AI Music Identity Engine</h2>
 
-<button onclick="createArtist()">Create Artist</button>
+    <input id="name" placeholder="Artist Name" />
+    <input id="birth" type="date" />
+    <input id="track" placeholder="Music URL" />
 
-<button onclick="testSystem()" style="background:#ff00aa;">
-TEST SYSTEM
-</button>
+    <br><br>
 
-<div id="feed"></div>
+    <button onclick="createArtist()">Generate Artist Identity</button>
+
+  </div>
+</div>
+
+<!-- FEED -->
+<div class="section">
+  <h2 style="text-align:center;">Featured Artists</h2>
+  <div id="feed"></div>
+</div>
 
 <!-- SUPABASE -->
 <script type="module">
@@ -99,9 +150,10 @@ const SUPABASE_KEY = "sb_publishable_GdcbeYfetx-OWJZuR1G3ew_c3dmWoBk";
 const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
 /* =========================
-   AI IDENTITY ENGINE
+   AI ENGINE
 ========================= */
 function resonanceEngine(name, birth) {
+
   let score = birth.replaceAll("-","")
     .split("")
     .reduce((a,b)=>a + Number(b), 0);
@@ -152,7 +204,7 @@ window.createArtist = async function () {
 };
 
 /* =========================
-   LOAD FEED
+   LOAD ARTISTS
 ========================= */
 async function loadArtists() {
 
@@ -165,23 +217,18 @@ async function loadArtists() {
   feed.innerHTML = "";
 
   data.forEach(a => {
+
     feed.innerHTML += `
       <div class="card">
         <h3>${a.name}</h3>
-        <p><b>${a.archetype}</b></p>
+        <div class="badge">${a.archetype}</div>
         <p>${a.bio}</p>
-        <audio controls src="${a.track}"></audio>
+        <p style="opacity:0.7">${a.energy} • ${a.audience}</p>
+        <audio controls src="${a.track}" style="width:100%;margin-top:10px;"></audio>
       </div>
     `;
   });
 }
-
-/* =========================
-   TEST SYSTEM
-========================= */
-window.testSystem = function () {
-  alert("SoundSeeds is LIVE 🌱");
-};
 
 loadArtists();
 
@@ -189,3 +236,4 @@ loadArtists();
 
 </body>
 </html>
+
