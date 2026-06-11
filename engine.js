@@ -1,4 +1,4 @@
-export function resonanceEngine(name, birth) {
+function resonanceEngine(name, birth) {
 
   let score = birth.replaceAll("-","")
     .split("")
@@ -41,4 +41,5 @@ export function resonanceEngine(name, birth) {
     audience: "Deep listeners",
     stage: "Concept artist"
   };
+}
 }
